@@ -1,10 +1,43 @@
-# Caravel User Project
+# Caravel User SRAM Example
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![UPRJ_CI](https://github.com/efabless/caravel_project_example/actions/workflows/user_project_ci.yml/badge.svg)](https://github.com/efabless/caravel_project_example/actions/workflows/user_project_ci.yml) [![Caravel Build](https://github.com/efabless/caravel_project_example/actions/workflows/caravel_build.yml/badge.svg)](https://github.com/efabless/caravel_project_example/actions/workflows/caravel_build.yml)
+This project demonstrates the straightforward integration of a commercial SRAM within the `user_project_wrapper` using the IPM (IP Manager) tool.
 
-| :exclamation: Important Note            |
-|-----------------------------------------|
+## Get Started Quickly
 
-## Please fill in your project documentation in this README.md file 
+### Follow these steps to set up your environment and harden the SRAM:
 
-Refer to [README](docs/source/index.md) for this sample project documentation.
+1. **Clone the Repository:**
+
+```
+git clone https://github.com/efabless/caravel_user_sram.git
+```
+2. **Prepare Your Environment:**
+
+```
+cd caravel_user_sram
+make setup
+```
+3. **Install IPM:**
+
+```
+pip install cf-ipm
+```
+4. **Install the SRAM IP:**
+
+```
+ipm install CF_SRAM_1024x32
+```
+5. **Harden the SRAM Macro:**
+
+```
+make CF_SRAM_1024x32_wb_wrapper
+```
+6. **Harden the User Project Wrapper:**
+
+```
+make user_project_wrapper
+```
+
+For further information on usage, consult the dedicated [knowledgebase article](https://chipfoundry.io/knowledge-base/commercial-sram). Details about the SRAM IP itself are available in the [SRAM documentation](https://chipfoundry.io/commercial-sram).
+
+
