@@ -13,7 +13,10 @@
 # limitations under the License.
 #
 # SPDX-License-Identifier: Apache-2.0
-MAKEFLAGS+=--warn-undefined-variables
+export CUP_ROOT ?= $(shell pwd)
+export TIMING_ROOT ?= $(shell pwd)/dependencies/timing-scripts
+export PROJECT_ROOT = $(CUP_ROOT)
+MAKEFLAGS += --warn-undefined-variables
 
 export CARAVEL_ROOT?=$(PWD)/caravel
 export UPRJ_ROOT?=$(PWD)
@@ -43,53 +46,43 @@ export DISABLE_LVS?=0
 export ROOTLESS
 
 ifeq ($(PDK),sky130A)
-	SKYWATER_COMMIT=f70d8ca46961ff92719d8870a18a076370b85f6c
-	export OPEN_PDKS_COMMIT_LVS?=6d4d11780c40b20ee63cc98e645307a9bf2b2ab8
-	export OPEN_PDKS_COMMIT?=0fe599b2afb6708d281543108caf8310912f54af
-	export OPENLANE_TAG?=2024.04.22
-	MPW_TAG ?= CC2509
-
+SKYWATER_COMMIT=f70d8ca46961ff92719d8870a18a076370b85f6c
+export OPEN_PDKS_COMMIT_LVS?=6d4d11780c40b20ee63cc98e645307a9bf2b2ab8
+export OPEN_PDKS_COMMIT?=0fe599b2afb6708d281543108caf8310912f54af
+MPW_TAG ?= CC2509
 ifeq ($(CARAVEL_LITE),1)
-	CARAVEL_NAME := caravel-lite
-	CARAVEL_REPO := https://github.com/chipfoundry/caravel-lite
-	CARAVEL_TAG := $(MPW_TAG)
+CARAVEL_NAME := caravel-lite
+CARAVEL_REPO := https://github.com/chipfoundry/caravel-lite
+CARAVEL_TAG := $(MPW_TAG)
 else
-	CARAVEL_NAME := caravel
-	CARAVEL_REPO := https://github.com/chipfoundry/caravel
-	CARAVEL_TAG := $(MPW_TAG)
+CARAVEL_NAME := caravel
+CARAVEL_REPO := https://github.com/chipfoundry/caravel
+CARAVEL_TAG := $(MPW_TAG)
 endif
-
 endif
 
 ifeq ($(PDK),sky130B)
-	SKYWATER_COMMIT=f70d8ca46961ff92719d8870a18a076370b85f6c
-	export OPEN_PDKS_COMMIT_LVS?=6d4d11780c40b20ee63cc98e645307a9bf2b2ab8
-	export OPEN_PDKS_COMMIT?=78b7bc32ddb4b6f14f76883c2e2dc5b5de9d1cbc
-	export OPENLANE_TAG?=2023.07.19-1
-	MPW_TAG ?= 2024.09.12-1
-
+SKYWATER_COMMIT=f70d8ca46961ff92719d8870a18a076370b85f6c
+export OPEN_PDKS_COMMIT_LVS?=6d4d11780c40b20ee63cc98e645307a9bf2b2ab8
+export OPEN_PDKS_COMMIT?=0fe599b2afb6708d281543108caf8310912f54af
+MPW_TAG ?= 2024.09.12-1
 ifeq ($(CARAVEL_LITE),1)
-	CARAVEL_NAME := caravel-lite
-	CARAVEL_REPO := https://github.com/chipfoundry/caravel-lite
-	CARAVEL_TAG := $(MPW_TAG)
+CARAVEL_NAME := caravel-lite
+CARAVEL_REPO := https://github.com/chipfoundry/caravel-lite
+CARAVEL_TAG := $(MPW_TAG)
 else
-	CARAVEL_NAME := caravel
-	CARAVEL_REPO := https://github.com/chipfoundry/caravel
-	CARAVEL_TAG := $(MPW_TAG)
+CARAVEL_NAME := caravel
+CARAVEL_REPO := https://github.com/chipfoundry/caravel
+CARAVEL_TAG := $(MPW_TAG)
 endif
-
 endif
 
 ifeq ($(PDK),gf180mcuD)
-
-	MPW_TAG ?= gfmpw-1c
-	CARAVEL_NAME := caravel
-	CARAVEL_REPO := https://github.com/chipfoundry/caravel-gf180mcu
-	CARAVEL_TAG := $(MPW_TAG)
-	#OPENLANE_TAG=ddfeab57e3e8769ea3d40dda12be0460e09bb6d9
-	export OPEN_PDKS_COMMIT?=78b7bc32ddb4b6f14f76883c2e2dc5b5de9d1cbc
-	export OPENLANE_TAG?=2023.07.19
-
+MPW_TAG ?= gfmpw-1c
+CARAVEL_NAME := caravel
+CARAVEL_REPO := https://github.com/chipfoundry/caravel-gf180mcu
+CARAVEL_TAG := $(MPW_TAG)
+export OPEN_PDKS_COMMIT?=78b7bc32ddb4b6f14f76883c2e2dc5b5de9d1cbc
 endif
 
 # Include Caravel Makefile Targets
@@ -120,10 +113,6 @@ simenv-cocotb:
 setup: check_dependencies install check-env install_mcw openlane pdk-with-ciel setup-timing-scripts setup-cocotb precheck
 
 # Openlane
-blocks=$(shell cd openlane && find * -maxdepth 0 -type d)
-.PHONY: $(blocks)
-$(blocks): % :
-	$(MAKE) -C openlane $*
 
 dv_patterns=$(shell cd verilog/dv && find * -maxdepth 0 -type d)
 cocotb-dv_patterns=$(shell cd verilog/dv/cocotb && find . -name "*.c"  | sed -e 's|^.*/||' -e 's/.c//')
@@ -154,9 +143,6 @@ docker_run_verify=\
 		chipfoundry/dv:latest \
 		sh -c $(verify_command)
 
-.PHONY: harden
-harden: $(blocks)
-
 .PHONY: verify
 verify: $(dv-targets-rtl)
 
@@ -181,32 +167,23 @@ $(dv-targets-gl-sdf): SIM=GL_SDF
 $(dv-targets-gl-sdf): verify-%-gl-sdf: $(dv_base_dependencies)
 	$(docker_run_verify)
 
-clean-targets=$(blocks:%=clean-%)
-.PHONY: $(clean-targets)
-$(clean-targets): clean-% :
-	rm -f ./verilog/gl/$*.v
-	rm -f ./spef/$*.spef
-	rm -f ./sdc/$*.sdc
-	rm -f ./sdf/$*.sdf
-	rm -f ./gds/$*.gds
-	rm -f ./mag/$*.mag
-	rm -f ./lef/$*.lef
-	rm -f ./maglef/*.maglef
-
 make_what=setup $(blocks) $(dv-targets-rtl) $(dv-targets-gl) $(dv-targets-gl-sdf) $(clean-targets)
 .PHONY: what
 what:
 	# $(make_what)
 
-# Install Openlane
-.PHONY: openlane
-openlane:
-	@if [ "$$(realpath $${OPENLANE_ROOT})" = "$$(realpath $$(pwd)/openlane)" ]; then\
-		echo "OPENLANE_ROOT is set to '$$(pwd)/openlane' which contains openlane config files"; \
-		echo "Please set it to a different directory"; \
-		exit 1; \
-	fi
-	cd openlane && $(MAKE) openlane
+# Install LibreLane
+.PHONY: librelane openlane librelane-% openlane2-venv openlane2-docker-container
+openlane: librelane
+librelane: librelane-venv
+openlane2-venv: librelane-venv
+openlane2-docker-container: librelane-docker-image
+librelane-%:
+	$(MAKE) -C openlane $@
+	
+# Alias to install with Ciel
+pdk-with-volare:
+	$(MAKE) pdk-with-ciel
 
 #### Not sure if the targets following are of any use
 
@@ -325,10 +302,6 @@ check_dependencies:
 		mkdir $(PWD)/dependencies; \
 	fi
 
-
-export CUP_ROOT=$(shell pwd)
-export TIMING_ROOT?=$(shell pwd)/dependencies/timing-scripts
-export PROJECT_ROOT=$(CUP_ROOT)
 timing-scripts-repo=https://github.com/chipfoundry/timing-scripts.git
 
 $(TIMING_ROOT):
@@ -371,7 +344,7 @@ $(cocotb-dv-targets-gl): cocotb-verify-%-gl:
 ./verilog/gl/user_project_wrapper.v:
 	$(error you don't have $@)
 
-./env/spef-mapping.tcl: 
+./env/spef-mapping.tcl:
 	@echo "run the following:"
 	@echo "make extract-parasitics"
 	@echo "make create-spef-mapping"
@@ -420,7 +393,7 @@ extract-parasitics: ./verilog/gl/user_project_wrapper.v
 	@$(MAKE) -C $(TIMING_ROOT) -f $(TIMING_ROOT)/timing.mk rcx-user_project_wrapper
 	@cat ./tmp-macros-list
 	@rm ./tmp-macros-list
-	
+
 .PHONY: caravel-sta
 caravel-sta: ./env/spef-mapping.tcl
 	@$(MAKE) -C $(TIMING_ROOT) -f $(TIMING_ROOT)/timing.mk caravel-timing-typ -j3
@@ -433,5 +406,25 @@ caravel-sta: ./env/spef-mapping.tcl
 		| xargs -I {} bash -c "head -n7 {} | tail -n1"
 	@echo =================================================================================================
 	@echo "You can find results for all corners in $(CUP_ROOT)/signoff/caravel/openlane-signoff/timing/"
-	@echo "Check summary.log of a specific corner to point to reports with reg2reg violations" 
+	@echo "Check summary.log of a specific corner to point to reports with reg2reg violations"
 	@echo "Cap and slew violations are inside summary.log file itself"
+
+blocks=$(shell cd $(PROJECT_ROOT)/openlane && find * -maxdepth 0 -type d)
+.PHONY: $(blocks)
+$(blocks): % :
+	$(MAKE) -C openlane $*
+
+.PHONY: harden
+harden: $(blocks)
+
+clean-targets=$(blocks:%=clean-%)
+.PHONY: $(clean-targets)
+$(clean-targets): clean-% :
+	rm -f ./verilog/gl/$*.v
+	rm -f ./spef/$*.spef
+	rm -f ./sdc/$*.sdc
+	rm -f ./sdf/$*.sdf
+	rm -f ./gds/$*.gds
+	rm -f ./mag/$*.mag
+	rm -f ./lef/$*.lef
+	rm -f ./maglef/*.maglef

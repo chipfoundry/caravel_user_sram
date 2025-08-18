@@ -130,4 +130,3 @@ define_pdn_grid \
 add_pdn_connect \
     -grid macro \
     -layers "$::env(FP_PDN_VERTICAL_LAYER) $::env(FP_PDN_HORIZONTAL_LAYER)"
-
