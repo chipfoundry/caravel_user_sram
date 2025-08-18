@@ -1,4 +1,13 @@
 {
+
+    "meta": {
+        "flow": "Classic",
+        "substituting_steps": {
+            "Yosys.JSONHeader": null,
+            "Odb.SetPowerConnections": null,
+            "Odb.WriteVerilogHeader": null
+        }
+    },
     "DESIGN_NAME": "CF_SRAM_1024x32_wb_wrapper",
     "FP_PDN_MULTILAYER": true,
     "FP_PDN_CORE_RING": false,
@@ -7,7 +16,8 @@
         "dir::../../ip/CF_SRAM_1024x32/hdl/controllers/ram_controller_wb.v",
         "dir::../../ip/CF_SRAM_1024x32/hdl/bus_wrapper/CF_SRAM_1024x32_wb_wrapper.v"
     ],
-    "SYNTH_DEFINES": ["PnR"],
+    "//VERILOG_DEFINES": ["PnR"],
+    "SYNTH_USE_PG_PINS_DEFINES": "USE_POWER_PINS",
     "ERROR_ON_LINTER_ERRORS": false,
     "CLOCK_PERIOD": 25,
     "CLOCK_PORT": "wb_clk_i",
@@ -23,7 +33,7 @@
     "GND_NETS": [
         "VGND"
     ],
-    "VERILOG_FILES_BLACKBOX": [
+    "EXTRA_VERILOG_MODELS": [
         "dir::../../ip/CF_SRAM_1024x32/hdl/CF_SRAM_1024x32_stub.v"
     ],
     "EXTRA_GDS_FILES": [
@@ -55,6 +65,8 @@
     ],
     "FP_PDN_CFG": "dir::pdn.tcl",
     "QUIT_ON_LINTER_ERRORS": false,
+    "QUIT_ON_SYNTH_CHECKS": false,
+    "QUIT_ON_YOSYS_WARNINGS": false,
     "GRT_OBS": [
 		"met1 0 40 314 435",
 		"met2 0 40 314 435",
@@ -71,5 +83,6 @@
     "GLB_RESIZER_TIMING_OPTIMIZATIONS": true,
     "QUIT_ON_MAGIC_DRC": false,
     "MAGIC_EXT_USE_GDS": false,
+    "MAGIC_CAPTURE_ERRORS": false,
     "QUIT_ON_ILLEGAL_OVERLAPS": false
 }
