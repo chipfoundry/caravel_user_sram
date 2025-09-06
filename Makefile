@@ -221,7 +221,7 @@ precheck:
 	@docker pull chipfoundry/mpw_precheck:latest
 
 .PHONY: run-precheck
-run-precheck: check-pdk check-precheck enable-lvs-pdk
+run-precheck: check-pdk check-precheck
 	@if [ "$$DISABLE_LVS" = "1" ]; then\
 		$(eval INPUT_DIRECTORY := $(shell pwd)) \
 		cd $(PRECHECK_ROOT) && \
