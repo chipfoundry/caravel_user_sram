@@ -9,7 +9,7 @@ This project demonstrates the straightforward integration of a commercial SRAM w
 1. **Clone the Repository:**
 
 ```
-git clone https://github.com/efabless/caravel_user_sram.git
+git clone https://github.com/chipfoundry/caravel_user_sram.git
 ```
 2. **Prepare Your Environment:**
 
