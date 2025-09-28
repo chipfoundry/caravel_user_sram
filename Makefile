@@ -35,7 +35,6 @@ export PDKPATH?=$(PDK_ROOT)/$(PDK)
 PYTHON_BIN ?= python3
 
 ROOTLESS ?= 0
-export CIEL_DATA_SOURCE=static-web:https://chipfoundry.github.io/ciel-releases
 USER_ARGS = -u $$(id -u $$USER):$$(id -g $$USER)
 ifeq ($(ROOTLESS), 1)
 	USER_ARGS =
@@ -46,7 +45,10 @@ export DISABLE_LVS?=0
 
 export ROOTLESS
 
+export CIEL_DATA_SOURCE=static-web:https://chipfoundry.github.io/ciel-releases
+
 ifeq ($(PDK),sky130A)
+export OPEN_PDKS_COMMIT_LVS?=6d4d11780c40b20ee63cc98e645307a9bf2b2ab8
 export OPEN_PDKS_COMMIT?=3e0e31dcce8519a7dbb82590346db16d91b7244f
 MPW_TAG ?= CC2509
 ifeq ($(CARAVEL_LITE),1)
@@ -61,6 +63,7 @@ endif
 endif
 
 ifeq ($(PDK),sky130B)
+export OPEN_PDKS_COMMIT_LVS?=6d4d11780c40b20ee63cc98e645307a9bf2b2ab8
 export OPEN_PDKS_COMMIT?=3e0e31dcce8519a7dbb82590346db16d91b7244f
 MPW_TAG ?= 2024.09.12-1
 ifeq ($(CARAVEL_LITE),1)

@@ -10,8 +10,9 @@ on:
 jobs:
   download_caravel:
     runs-on: ubuntu-latest
+    name: Build and Cache PDK
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -29,7 +30,7 @@ jobs:
           echo "PRECHECK_ROOT=$GITHUB_WORKSPACE/mpw_precheck" >> $GITHUB_ENV
           echo "MPW_TAG=main" >> $GITHUB_ENV
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           sudo mkdir -p ${{ env.PDK_ROOT }}
           sudo chown -R $USER:$USER ${{ env.PDK_ROOT }}
@@ -42,19 +43,20 @@ jobs:
           tar -cf /tmp/caravel.tar -C $CARAVEL_ROOT .
 
       - name: Upload Caravel Tarball
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: caravel-tarball
           path: /tmp/caravel.tar
-  
+
   download_deps:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        targets: ["pdk-with-volare", "install_mcw", "openlane", "setup-timing-scripts", "precheck"]
+        targets:
+          ["pdk-with-volare", "install_mcw", "setup-timing-scripts", "precheck"]
     needs: [download_caravel]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -65,21 +67,17 @@ jobs:
       - name: Setup Environment Variables
         run: |
           echo "PDK_ROOT=$GITHUB_WORKSPACE/pdk" >> $GITHUB_ENV
-          echo "OPENLANE_ROOT=$GITHUB_WORKSPACE/openlane_src" >> $GITHUB_ENV
           echo "CARAVEL_ROOT=$GITHUB_WORKSPACE/caravel" >> $GITHUB_ENV
           echo "MCW_ROOT=$GITHUB_WORKSPACE/mgmt_core_wrapper" >> $GITHUB_ENV
           echo "TIMING_ROOT=$GITHUB_WORKSPACE/timing-scripts" >> $GITHUB_ENV
           echo "PRECHECK_ROOT=$GITHUB_WORKSPACE/mpw_precheck" >> $GITHUB_ENV
           echo "MPW_TAG=main" >> $GITHUB_ENV
-      
+
       - name: Get dependencies name
         run: |
           if [[ "${{ matrix.targets }}" == "install_mcw" ]]; then
             echo "dep_name=mgmt_core_wrapper" >> $GITHUB_ENV
             echo "dep_root=${{ env.MCW_ROOT }}" >> $GITHUB_ENV
-          elif [[ "${{ matrix.targets }}" == "openlane" ]]; then
-            echo "dep_name=openlane" >> $GITHUB_ENV
-            echo "dep_root=${{ env.OPENLANE_ROOT }}" >> $GITHUB_ENV
           elif [[ "${{ matrix.targets }}" == "pdk-with-volare" ]]; then
             echo "dep_name=pdk" >> $GITHUB_ENV
             echo "dep_root=${{ env.PDK_ROOT }}" >> $GITHUB_ENV
@@ -92,7 +90,7 @@ jobs:
           fi
 
       - name: Download caravel Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: caravel-tarball
           path: /tmp
@@ -118,7 +116,7 @@ jobs:
           tar -cf /tmp/${{ env.dep_name }}.tar -C ${{ env.dep_root }} .
 
       - name: Upload Dependencies Tarball
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.dep_name }}-tarball
           path: /tmp/${{ env.dep_name }}.tar
@@ -131,7 +129,7 @@ jobs:
         pdk: ["sky130A", "sky130B"]
     needs: [download_deps]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -144,7 +142,6 @@ jobs:
           echo "PDK=${{ matrix.pdk }}" >> $GITHUB_ENV
           echo "PDKPATH=$GITHUB_WORKSPACE/pdk/${{ matrix.pdk }}" >> $GITHUB_ENV
           echo "PDK_ROOT=$GITHUB_WORKSPACE/pdk" >> $GITHUB_ENV
-          echo "OPENLANE_ROOT=$GITHUB_WORKSPACE/openlane_src" >> $GITHUB_ENV
           echo "CARAVEL_ROOT=$GITHUB_WORKSPACE/caravel" >> $GITHUB_ENV
           echo "MCW_ROOT=$GITHUB_WORKSPACE/mgmt_core_wrapper" >> $GITHUB_ENV
           echo "TIMING_ROOT=$GITHUB_WORKSPACE/timing-scripts" >> $GITHUB_ENV
@@ -152,7 +149,7 @@ jobs:
           echo "MPW_TAG=main" >> $GITHUB_ENV
 
       - name: Download PDK Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: pdk-tarball
           path: /tmp
@@ -163,91 +160,8 @@ jobs:
           sudo chown -R $USER:$USER ${{ env.PDK_ROOT }}
           tar -xf /tmp/pdk.tar -C $PDK_ROOT .
 
-      - name: Download openlane Tarball
-        uses: actions/download-artifact@v2
-        with:
-          name: openlane-tarball
-          path: /tmp
-
-      - name: Unpack openlane Tarball
-        run: |
-          sudo mkdir -p ${{ env.OPENLANE_ROOT }}
-          sudo chown -R $USER:$USER ${{ env.OPENLANE_ROOT }}
-          tar -xf /tmp/openlane.tar -C $OPENLANE_ROOT .
-
-      - name: Harden using Openlane
-        run: |
-          python3 $GITHUB_WORKSPACE/.github/scripts/get_designs.py --design $GITHUB_WORKSPACE
-          for word in $(cat harden_sequence.txt); do
-            echo "CURRENT_DESIGN=${word}" >> $GITHUB_ENV
-            make $word
-          done
-          rm -rf openlane/user_proj_example/runs openlane/user_project_wrapper/runs pdk openlane_src caravel mgmt_core_wrapper timing-scripts mpw_precheck
-
-      - name: Create reproducible
-        if: failure()
-        run: tar -cf $GITHUB_WORKSPACE/issue_reproducible.tar -C $GITHUB_WORKSPACE/openlane/${{ env.CURRENT_DESIGN }}/runs/${{ env.CURRENT_DESIGN }}/issue_reproducible .
-      
-      - name: upload failure logs
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: openlane-issue-reproducible
-          path: |
-            $GITHUB_WORKSPACE/issue_reproducible.tar
-      
-      - name: Tarball Design_${{ matrix.pdk }}
-        run: |
-          tar -cf /tmp/design_${{ matrix.pdk }}.tar -C $GITHUB_WORKSPACE .
-
-      - name: Upload Design_${{ matrix.pdk }} Tarball
-        uses: actions/upload-artifact@v2
-        with:
-          name: design_${{ matrix.pdk }}-tarball
-          path: /tmp/design_${{ matrix.pdk }}.tar
-  
-  RTL-verification:
-    timeout-minutes: 720
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        pdk: ["sky130A", "sky130B"]
-    needs: [download_deps]
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Export ENVIRONMENT VARIABLES
-        run: |
-          echo "PDK=${{ matrix.pdk }}" >> $GITHUB_ENV
-          echo "PDKPATH=$GITHUB_WORKSPACE/pdk/${{ matrix.pdk }}" >> $GITHUB_ENV
-          echo "PDK_ROOT=$GITHUB_WORKSPACE/pdk" >> $GITHUB_ENV
-          echo "OPENLANE_ROOT=$GITHUB_WORKSPACE/openlane_src" >> $GITHUB_ENV
-          echo "CARAVEL_ROOT=$GITHUB_WORKSPACE/caravel" >> $GITHUB_ENV
-          echo "MCW_ROOT=$GITHUB_WORKSPACE/mgmt_core_wrapper" >> $GITHUB_ENV
-          echo "TIMING_ROOT=$GITHUB_WORKSPACE/timing-scripts" >> $GITHUB_ENV
-          echo "PRECHECK_ROOT=$GITHUB_WORKSPACE/mpw_precheck" >> $GITHUB_ENV
-          echo "MPW_TAG=main" >> $GITHUB_ENV
-
-      - name: Download PDK Tarball
-        uses: actions/download-artifact@v2
-        with:
-          name: pdk-tarball
-          path: /tmp
-
-      - name: Unpack PDK Tarball
-        run: |
-          sudo mkdir -p ${{ env.PDK_ROOT }}
-          sudo chown -R $USER:$USER ${{ env.PDK_ROOT }}
-          tar -xf /tmp/pdk.tar -C $PDK_ROOT .
-      
       - name: Download caravel Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: caravel-tarball
           path: /tmp
@@ -257,9 +171,99 @@ jobs:
           sudo mkdir -p ${{ env.CARAVEL_ROOT }}
           sudo chown -R $USER:$USER ${{ env.CARAVEL_ROOT }}
           tar -xf /tmp/caravel.tar -C $CARAVEL_ROOT .
-      
+
+      - name: Install LibreLane
+        run: |
+          sudo apt-get install -y python3 python3-venv python3-tk
+          cd $GITHUB_WORKSPACE
+          make openlane
+
+      - name: Harden using LibreLane
+        run: |
+          python3 $GITHUB_WORKSPACE/.github/scripts/get_designs.py --design $GITHUB_WORKSPACE
+          for word in $(cat harden_sequence.txt); do
+            echo "CURRENT_DESIGN=${word}" >> $GITHUB_ENV
+            make $word
+          done
+          rm -rf openlane/user_proj_example/runs openlane/user_project_wrapper/runs pdk openlane_src caravel mgmt_core_wrapper timing-scripts mpw_precheck
+
+      ## TODO: LibreLane does not do reproducibles.
+      # - name: Create reproducible
+      #   if: failure()
+      #   run: tar -cf $GITHUB_WORKSPACE/issue_reproducible.tar -C $GITHUB_WORKSPACE/openlane/${{ env.CURRENT_DESIGN }}/runs/${{ env.CURRENT_DESIGN }}/issue_reproducible .
+
+      # - name: upload failure logs
+      #   if: failure()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: openlane-issue-reproducible
+      #     path: |
+      #       $GITHUB_WORKSPACE/issue_reproducible.tar
+
+      - name: Tarball Design_${{ matrix.pdk }}
+        run: |
+          tar -cf /tmp/design_${{ matrix.pdk }}.tar -C $GITHUB_WORKSPACE .
+
+      - name: Upload Design_${{ matrix.pdk }} Tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: design_${{ matrix.pdk }}-tarball
+          path: /tmp/design_${{ matrix.pdk }}.tar
+
+  RTL-verification:
+    timeout-minutes: 720
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        pdk: ["sky130A", "sky130B"]
+    needs: [download_deps]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Export ENVIRONMENT VARIABLES
+        run: |
+          echo "PDK=${{ matrix.pdk }}" >> $GITHUB_ENV
+          echo "PDKPATH=$GITHUB_WORKSPACE/pdk/${{ matrix.pdk }}" >> $GITHUB_ENV
+          echo "PDK_ROOT=$GITHUB_WORKSPACE/pdk" >> $GITHUB_ENV
+          echo "OPENLANE_ROOT=$GITHUB_WORKSPACE/openlane_src" >> $GITHUB_ENV
+          echo "CARAVEL_ROOT=$GITHUB_WORKSPACE/caravel" >> $GITHUB_ENV
+          echo "MCW_ROOT=$GITHUB_WORKSPACE/mgmt_core_wrapper" >> $GITHUB_ENV
+          echo "TIMING_ROOT=$GITHUB_WORKSPACE/timing-scripts" >> $GITHUB_ENV
+          echo "PRECHECK_ROOT=$GITHUB_WORKSPACE/mpw_precheck" >> $GITHUB_ENV
+          echo "MPW_TAG=main" >> $GITHUB_ENV
+
+      - name: Download PDK Tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: pdk-tarball
+          path: /tmp
+
+      - name: Unpack PDK Tarball
+        run: |
+          sudo mkdir -p ${{ env.PDK_ROOT }}
+          sudo chown -R $USER:$USER ${{ env.PDK_ROOT }}
+          tar -xf /tmp/pdk.tar -C $PDK_ROOT .
+
+      - name: Download caravel Tarball
+        uses: actions/download-artifact@v4
+        with:
+          name: caravel-tarball
+          path: /tmp
+
+      - name: Unpack caravel Tarball
+        run: |
+          sudo mkdir -p ${{ env.CARAVEL_ROOT }}
+          sudo chown -R $USER:$USER ${{ env.CARAVEL_ROOT }}
+          tar -xf /tmp/caravel.tar -C $CARAVEL_ROOT .
+
       - name: Download mgmt_core_wrapper Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: mgmt_core_wrapper-tarball
           path: /tmp
@@ -273,7 +277,7 @@ jobs:
       - name: install cocotb
         run: |
           make setup-cocotb
-      
+
       - name: run RTL verification
         run: |
           cd $GITHUB_WORKSPACE/verilog/dv/cocotb && $GITHUB_WORKSPACE/venv-cocotb/bin/caravel_cocotb -tl user_proj_tests/user_proj_tests.yaml -verbosity debug --CI -tag rtl_verification
@@ -290,7 +294,7 @@ jobs:
         pdk: ["sky130A", "sky130B"]
     needs: [hardening]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -310,7 +314,7 @@ jobs:
           echo "MPW_TAG=main" >> $GITHUB_ENV
 
       - name: Download PDK Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: pdk-tarball
           path: /tmp
@@ -322,7 +326,7 @@ jobs:
           tar -xf /tmp/pdk.tar -C $PDK_ROOT .
 
       - name: Download precheck Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: precheck-tarball
           path: /tmp
@@ -334,7 +338,7 @@ jobs:
           tar -xf /tmp/precheck.tar -C $PRECHECK_ROOT .
 
       - name: Download Design_${{ matrix.pdk }} Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: design_${{ matrix.pdk }}-tarball
           path: /tmp
@@ -344,7 +348,7 @@ jobs:
           sudo mkdir -p $GITHUB_WORKSPACE
           sudo chown -R $USER:$USER $GITHUB_WORKSPACE
           tar -xf /tmp/design_${{ matrix.pdk }}.tar -C $GITHUB_WORKSPACE .
-      
+
       - name: Run Precheck
         run: |
           export INPUT_DIRECTORY=$GITHUB_WORKSPACE
@@ -359,7 +363,7 @@ jobs:
           if ! [[ $cnt ]]; then cnt=0; fi
           if [[ $cnt -eq 1 ]]; then exit 0; fi
           exit 2
-  
+
   STA:
     timeout-minutes: 720
     runs-on: ubuntu-latest
@@ -368,7 +372,7 @@ jobs:
         pdk: ["sky130A"]
     needs: [hardening]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -388,7 +392,7 @@ jobs:
           echo "MPW_TAG=main" >> $GITHUB_ENV
 
       - name: Download PDK Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: pdk-tarball
           path: /tmp
@@ -400,7 +404,7 @@ jobs:
           tar -xf /tmp/pdk.tar -C $PDK_ROOT .
 
       - name: Download timing-scripts Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: timing-scripts-tarball
           path: /tmp
@@ -412,7 +416,7 @@ jobs:
           tar -xf /tmp/timing-scripts.tar -C $TIMING_ROOT .
 
       - name: Download Design_${{ matrix.pdk }} Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: design_${{ matrix.pdk }}-tarball
           path: /tmp
@@ -424,7 +428,7 @@ jobs:
           tar -xf /tmp/design_${{ matrix.pdk }}.tar -C $GITHUB_WORKSPACE .
 
       - name: Download Caravel Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: caravel-tarball
           path: /tmp
@@ -436,7 +440,7 @@ jobs:
           tar -xf /tmp/caravel.tar -C ${{ env.CARAVEL_ROOT }} .
 
       - name: Download mgmt_core_wrapper Tarball
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: mgmt_core_wrapper-tarball
           path: /tmp
@@ -446,7 +450,7 @@ jobs:
           sudo mkdir -p ${{ env.MCW_ROOT }}
           sudo chown -R $USER:$USER ${{ env.MCW_ROOT }}
           tar -xf /tmp/mgmt_core_wrapper.tar -C ${{ env.MCW_ROOT }} .
-      
+
       - name: Run STA
         run: |
           export CUP_ROOT=$GITHUB_WORKSPACE
@@ -469,7 +473,7 @@ jobs:
             echo "STA run passed"
             exit 0
           fi
-  
+
   # GL-verification:
   #   timeout-minutes: 720
   #   runs-on: ubuntu-latest
@@ -478,7 +482,7 @@ jobs:
   #       pdk: ["sky130A", "sky130B"]
   #   needs: [download_deps]
   #   steps:
-  #     - uses: actions/checkout@v2
+  #     - uses: actions/checkout@v4
 
   #     - name: Set up QEMU
   #       uses: docker/setup-qemu-action@v1
@@ -499,7 +503,7 @@ jobs:
   #         echo "MPW_TAG=main" >> $GITHUB_ENV
 
   #     - name: Download PDK Tarball
-  #       uses: actions/download-artifact@v2
+  #       uses: actions/download-artifact@v4
   #       with:
   #         name: pdk-tarball
   #         path: /tmp
@@ -509,9 +513,9 @@ jobs:
   #         sudo mkdir -p ${{ env.PDK_ROOT }}
   #         sudo chown -R $USER:$USER ${{ env.PDK_ROOT }}
   #         tar -xf /tmp/pdk.tar -C $PDK_ROOT .
-      
+
   #     - name: Download caravel Tarball
-  #       uses: actions/download-artifact@v2
+  #       uses: actions/download-artifact@v4
   #       with:
   #         name: caravel-tarball
   #         path: /tmp
@@ -521,9 +525,9 @@ jobs:
   #         sudo mkdir -p ${{ env.CARAVEL_ROOT }}
   #         sudo chown -R $USER:$USER ${{ env.CARAVEL_ROOT }}
   #         tar -xf /tmp/caravel.tar -C $CARAVEL_ROOT .
-      
+
   #     - name: Download mgmt_core_wrapper Tarball
-  #       uses: actions/download-artifact@v2
+  #       uses: actions/download-artifact@v4
   #       with:
   #         name: mgmt_core_wrapper-tarball
   #         path: /tmp
@@ -535,7 +539,7 @@ jobs:
   #         tar -xf /tmp/mgmt_core_wrapper.tar -C $MCW_ROOT .
 
   #     # - name: Download Design Tarball
-  #     #   uses: actions/download-artifact@v2
+  #     #   uses: actions/download-artifact@v4
   #     #   with:
   #     #     name: design-tarball
   #     #     path: /tmp
@@ -549,7 +553,7 @@ jobs:
   #     - name: install cocotb
   #       run: |
   #         make setup-cocotb
-      
+
   #     - name: run RTL verification
   #       run: |
   #         cd $GITHUB_WORKSPACE/verilog/dv/cocotb && $GITHUB_WORKSPACE/venv-cocotb/bin/caravel_cocotb -tl user_proj_tests/user_proj_tests_gl.yaml -verbosity debug --CI  -tag gl_verification
