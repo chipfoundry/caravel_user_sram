@@ -1,0 +1,66 @@
+2 Lint errors found.
+446 Lint warnings found.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[IFP-0028] Core area lower left (5.000, 5.000) snapped to (5.060, 5.440).
+Using 'MACRO_PLACEMENT_CFG' is deprecated. It is recommended to use the new 'MACROS' configuration variable.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[PDN-0110] No via inserted between met1 and met2 at (9.1800, 29.6800) - (10.9400, 29.7200) on VPWR
+[PDN-0110] No via inserted between met1 and met2 at (59.1800, 29.6800) - (60.9400, 29.8600) on VPWR
+[PDN-0110] No via inserted between met1 and met2 at (109.1800, 29.6800) - (110.9400, 29.8600) on VPWR
+[PDN-0110] No via inserted between met1 and met2 at (159.1800, 29.6800) - (160.9400, 29.8600) on VPWR
+[PDN-0110] No via inserted between met1 and met2 at (209.1800, 29.6800) - (210.9400, 29.8600) on VPWR
+[PDN-0110] No via inserted between met1 and met2 at (259.1800, 29.6800) - (260.9400, 29.7200) on VPWR
+[PDN-0110] No via inserted between met1 and met2 at (309.1800, 29.6800) - (310.9400, 29.8600) on VPWR
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[GRT-0097] No global routing found for nets.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[GRT-0097] No global routing found for nets.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[GRT-0097] No global routing found for nets.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1140] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 29, library CF_SRAM_1024x32_tt_180V_25C already exists.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer mcon
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer mcon
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via2
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via2
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via3
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via3
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via4
+[DRT-0349] LEF58_ENCLOSURE with no CUTCLASS is not supported. Skipping for layer via4
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+Threshold for Threshold-surpassing long wires is not set. The checker will be skipped.
+[STA-1173] /Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/ip/CF_SRAM_1024x32/lib/CF_SRAM_1024x32_tt_180V_25C.lib line 62, default_fanout_load is 0.0.
+Cell 'CF_SRAM_1024x32_wb_wrapper' has (22) input pin(s) without antenna gate information. They might not be connected to a gate.
+138 Magic DRC errors found.
+9469 Magic Illegal Overlap errors found.

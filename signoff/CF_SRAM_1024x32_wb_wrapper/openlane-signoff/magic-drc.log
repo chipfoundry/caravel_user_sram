@@ -1,0 +1,57 @@
+
+Magic 8.3 revision 489 - Compiled on Thu Aug 22 13:35:24 UTC 2024.
+Starting magic under Tcl interpreter
+Using the terminal as the console.
+Using NULL graphics device.
+Processing system .magicrc file
+Sourcing design .magicrc for technology sky130A ...
+2 Magic internal units = 1 Lambda
+Input style sky130(): scaleFactor=2, multiplier=2
+The following types are not handled by extraction and will be treated as non-electrical types:
+    ubm 
+Scaled tech values by 2 / 1 to match internal grid scaling
+Loading sky130A Device Generator Menu ...
+Loading "/nix/store/qx9hc4l6vr4pbhihbl6i832pf0ng5mlv-python3-3.11.9-env/lib/python3.11/site-packages/librelane/scripts/magic/wrapper.tcl" from command line.
+Warning: Calma reading is not undoable!  I hope that's OK.
+Library written using GDS-II Release 3.0
+Library name: CF_SRAM_1024x32_wb_wrapper
+Reading "sky130_fd_sc_hd__decap_3".
+Reading "sky130_ef_sc_hd__decap_40_12".
+Reading "sky130_fd_sc_hd__tapvpwrvgnd_1".
+Reading "sky130_fd_sc_hd__fill_1".
+Reading "sky130_fd_sc_hd__fill_2".
+Reading "sky130_fd_sc_hd__fill_4".
+Reading "sky130_fd_sc_hd__buf_1".
+Reading "sky130_fd_sc_hd__fill_8".
+Reading "sky130_fd_sc_hd__dlygate4sd3_1".
+Reading "sky130_fd_sc_hd__buf_2".
+Reading "sky130_fd_sc_hd__buf_12".
+Reading "sky130_fd_sc_hd__clkbuf_4".
+Reading "sky130_fd_sc_hd__diode_2".
+Reading "sky130_fd_sc_hd__buf_4".
+Reading "sky130_fd_sc_hd__inv_2".
+Reading "sky130_fd_sc_hd__and4b_1".
+Reading "sky130_fd_sc_hd__dfrtp_1".
+Reading "sky130_fd_sc_hd__and4b_2".
+Reading "sky130_fd_sc_hd__and2_4".
+Reading "sky130_fd_sc_hd__clkbuf_2".
+Reading "sky130_fd_sc_hd__clkbuf_16".
+Reading "sky130_fd_sc_hd__clkinv_4".
+Reading "sky130_fd_sc_hd__clkinv_16".
+Reading "sky130_fd_sc_hd__conb_1".
+Reading "CF_SRAM_1024x32_macro".
+CIF file read warning: CIF style sky130(): units rescaled by factor of 5 / 1
+Error while reading cell "CF_SRAM_1024x32_macro" (byte position 179088): Unknown layer/datatype in boundary, layer=67 type=10
+Error while reading cell "CF_SRAM_1024x32_macro" (byte position 179152): Unknown layer/datatype in boundary, layer=68 type=10
+Error while reading cell "CF_SRAM_1024x32_macro" (byte position 179216): Unknown layer/datatype in boundary, layer=69 type=10
+Reading "CF_SRAM_1024x32".
+Reading "CF_SRAM_1024x32_wb_wrapper".
+[INFO] Loading CF_SRAM_1024x32_wb_wrapper
+
+DRC style is now "drc(full)"
+Loading DRC CIF style.
+[INFO] COUNT: 138
+[INFO] Should be divided by 3 or 4
+[INFO] DRC Checking DONE (/Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/openlane/CF_SRAM_1024x32_wb_wrapper/runs/26_09_04_22_34/59-magic-drc/reports/drc_violations.magic.rpt)
+[INFO] Saving mag view with DRC errors (/Users/jeffdi/Projects/chipignite-ip/caravel_user_sram/openlane/CF_SRAM_1024x32_wb_wrapper/runs/26_09_04_22_34/59-magic-drc/views/CF_SRAM_1024x32_wb_wrapper.drc.mag)
+[INFO] Saved

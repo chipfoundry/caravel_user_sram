@@ -1,0 +1,163 @@
+
+===========================================================================
+report_checks -unconstrained
+===========================================================================
+======================= min_ff_n40C_1v95 Corner ===================================
+
+Startpoint: wb_rst_i (input port clocked by clk)
+Endpoint: _45_ (recovery check against rising-edge clock clk)
+Path Group: asynchronous
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                                  0.000000    0.000000   clock clk (rise edge)
+                                  5.570000    5.570000   clock network delay (propagated)
+                                 12.500000   18.070000 v input external delay
+     1    0.002408    0.000000    0.000000   18.070000 v wb_rst_i (in)
+                                                         wb_rst_i (net)
+                      0.000019    0.000011   18.070009 v input1/A (sky130_fd_sc_hd__buf_1)
+     1    0.008889    0.039903    0.067365   18.137375 v input1/X (sky130_fd_sc_hd__buf_1)
+                                                         net1 (net)
+                      0.039904    0.000227   18.137602 v _11_/A (sky130_fd_sc_hd__inv_2)
+     1    0.008069    0.033699    0.046111   18.183712 ^ _11_/Y (sky130_fd_sc_hd__inv_2)
+                                                         _00_ (net)
+                      0.033699    0.000206   18.183918 ^ _45_/RESET_B (sky130_fd_sc_hd__dfrtp_1)
+                                             18.183918   data arrival time
+
+                                 25.000000   25.000000   clock clk (rise edge)
+                                  4.650000   29.650000   clock source latency
+     1    0.049890    0.610000    0.000000   29.650000 ^ wb_clk_i (in)
+                                                         wb_clk_i (net)
+                      0.623604    0.006462   29.656462 ^ clkbuf_0_wb_clk_i/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.059415    0.071220    0.156914   29.813375 ^ clkbuf_0_wb_clk_i/X (sky130_fd_sc_hd__clkbuf_16)
+                                                         clknet_0_wb_clk_i (net)
+                      0.072017    0.005546   29.818922 ^ clkbuf_1_0__f_wb_clk_i/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.052267    0.054060    0.109441   29.928364 ^ clkbuf_1_0__f_wb_clk_i/X (sky130_fd_sc_hd__clkbuf_16)
+                                                         clknet_1_0__leaf_wb_clk_i (net)
+                      0.054069    0.000643   29.929007 ^ _45_/CLK (sky130_fd_sc_hd__dfrtp_1)
+                                 -0.100000   29.829008   clock uncertainty
+                                  0.000000   29.829008   clock reconvergence pessimism
+                                  0.146607   29.975615   library recovery time
+                                             29.975615   data required time
+---------------------------------------------------------------------------------------------
+                                             29.975615   data required time
+                                            -18.183918   data arrival time
+---------------------------------------------------------------------------------------------
+                                             11.791695   slack (MET)
+
+
+Startpoint: wbs_we_i (input port clocked by clk)
+Endpoint: wbs_dat_o[10] (output port clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                                  0.000000    0.000000   clock clk (rise edge)
+                                  5.570000    5.570000   clock network delay (propagated)
+                                  3.740000    9.310000 v input external delay
+     1    0.003555    0.140000    0.000000    9.310000 v wbs_we_i (in)
+                                                         wbs_we_i (net)
+                      0.140062    0.000032    9.310032 v input50/A (sky130_fd_sc_hd__buf_2)
+     5    0.049727    0.084843    0.186448    9.496480 v input50/X (sky130_fd_sc_hd__buf_2)
+                                                         net50 (net)
+                      0.084935    0.001678    9.498158 v fanout85/A (sky130_fd_sc_hd__buf_4)
+    15    0.069275    0.068280    0.165992    9.664149 v fanout85/X (sky130_fd_sc_hd__buf_4)
+                                                         net85 (net)
+                      0.068281    0.000204    9.664354 v fanout84/A (sky130_fd_sc_hd__clkbuf_2)
+    15    0.035676    0.095245    0.152458    9.816812 v fanout84/X (sky130_fd_sc_hd__clkbuf_2)
+                                                         net84 (net)
+                      0.095247    0.000548    9.817360 v _17_/A_N (sky130_fd_sc_hd__and4b_1)
+     1    0.022409    0.172991    0.284090   10.101450 ^ _17_/X (sky130_fd_sc_hd__and4b_1)
+                                                         net53 (net)
+                      0.172996    0.001170   10.102619 ^ output53/A (sky130_fd_sc_hd__buf_12)
+     1    0.191246    0.166847    0.191426   10.294045 ^ output53/X (sky130_fd_sc_hd__buf_12)
+                                                         wbs_dat_o[10] (net)
+                      0.166879    0.002011   10.296056 ^ wbs_dat_o[10] (out)
+                                             10.296056   data arrival time
+
+                                 25.000000   25.000000   clock clk (rise edge)
+                                  4.650000   29.650000   clock network delay (propagated)
+                                 -0.100000   29.549999   clock uncertainty
+                                  0.000000   29.549999   clock reconvergence pessimism
+                                 -3.620000   25.929998   output external delay
+                                             25.929998   data required time
+---------------------------------------------------------------------------------------------
+                                             25.929998   data required time
+                                            -10.296056   data arrival time
+---------------------------------------------------------------------------------------------
+                                             15.633943   slack (MET)
+
+
+
+
+===========================================================================
+report_checks --slack_max -0.01
+============================================================================
+======================= min_ff_n40C_1v95 Corner ===================================
+
+No paths found.
+
+
+===========================================================================
+ report_check_types -max_slew -max_cap -max_fanout -violators
+============================================================================
+======================= min_ff_n40C_1v95 Corner ===================================
+
+
+
+===========================================================================
+report_parasitic_annotation -report_unannotated
+============================================================================
+Found 33 unannotated drivers.
+ wbs_adr_i[0]
+ wbs_adr_i[12]
+ wbs_adr_i[13]
+ wbs_adr_i[14]
+ wbs_adr_i[15]
+ wbs_adr_i[16]
+ wbs_adr_i[17]
+ wbs_adr_i[18]
+ wbs_adr_i[19]
+ wbs_adr_i[1]
+ wbs_adr_i[20]
+ wbs_adr_i[21]
+ wbs_adr_i[22]
+ wbs_adr_i[23]
+ wbs_adr_i[24]
+ wbs_adr_i[25]
+ wbs_adr_i[26]
+ wbs_adr_i[27]
+ wbs_adr_i[28]
+ wbs_adr_i[29]
+ wbs_adr_i[30]
+ wbs_adr_i[31]
+ clkload0/Y
+ i_sram/ScanOutCC
+ i_sram_90/HI
+ i_sram_91/HI
+ i_sram_92/HI
+ i_sram_93/HI
+ i_sram_94/HI
+ i_sram_95/HI
+ i_sram_96/HI
+ i_sram_97/LO
+ i_sram_98/LO
+Found 0 partially unannotated drivers.
+
+===========================================================================
+max slew violation count 0
+max fanout violation count 0
+max cap violation count 0
+============================================================================
+
+===========================================================================
+check_setup -verbose -unconstrained_endpoints -multiple_clock -no_clock -no_input_delay -loops -generated_clocks
+===========================================================================
+Warning: There are 5 unconstrained endpoints.
+  i_sram/SM
+  i_sram/ScanInCC
+  i_sram/ScanInDL
+  i_sram/ScanInDR
+  i_sram/TM
